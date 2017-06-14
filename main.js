@@ -32,6 +32,8 @@ class Clock {
 	}
 	stop(){
 		clearInterval(this.clock);
+		this.$clock.classList.add('red-color')
+		playAudio('alarm.mp3')
 	}
 	isFinished(){
 		return this.currentTime === this.limitTime;
@@ -45,10 +47,18 @@ class Clock {
 	}
 }
 
+function playAudio(src){
+	let audio = new Audio(src);
+	audio.load();
+	audio.play();
+
+
+}
+
 function setup(){
 	
 	let clock1 = new Clock();
-	clock1.start('00:05')
+	clock1.start('00:02')
 }
 
 window.addEventListener('DOMContentLoaded', setup);
