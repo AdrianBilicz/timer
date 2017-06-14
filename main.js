@@ -10,24 +10,45 @@ class Clock {
 	}
 	start(formattedTime){
 		this.limitTime = Clock.parseSeconds(formattedTime)
-		
+		this.update();
 		this.clock = setInterval( () => {
 			this.currentTime += ONE_SECOND
-			let diff = this.limitTime - this.currentTime;
-			this.render(diff)
+			this.update();
+			if(this.isFinished()){
+				this.stop()
+			}
 		}, ONE_SECOND)
+	}
+	getTimeRemain(){
+		return Clock.formatTime(this.limitTime - this.currentTime)
+	}
+	update(){
+		this.render(this.getTimeRemain())
 	}
 	static parseSeconds(time){
 		let [minutes,seconds] = time.split(':').map(Number)
 		return minutes * 60 * ONE_SECOND + seconds * ONE_SECOND;
 
 	}
+	stop(){
+		clearInterval(this.clock);
+	}
+	isFinished(){
+		return this.currentTime === this.limitTime;
+	}
+	static formatTime(miliseconds){
+			let minutes = Math.floor(miliseconds / ONE_SECOND / 60);
+			let seconds = miliseconds/ ONE_SECOND % 60;
+			minutes =String(minutes).padStart(2,'0')
+			seconds =String(seconds).padStart(2,'0')
+			return `${minutes}:${seconds}`
+	}
 }
 
 function setup(){
 	
 	let clock1 = new Clock();
-	clock1.start('10:00')
+	clock1.start('00:05')
 }
 
 window.addEventListener('DOMContentLoaded', setup);
